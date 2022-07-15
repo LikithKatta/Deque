@@ -31,7 +31,7 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     // add the item to the front
-    public static void addFirst(Item item)
+    public void addFirst(Item item)
     {
         if(item == null){
             throw new IllegalArgumentException("cannot add null to the deque");
@@ -39,7 +39,7 @@ public class Deque<Item> implements Iterable<Item> {
             Node newone = new Node();
             newone.data = item;
             if(first == null){
-                first = last = newone;
+                first=last=newone;
             }
             else{
                 newone.next = first;
@@ -47,7 +47,6 @@ public class Deque<Item> implements Iterable<Item> {
             }
             count++;
         }
-    }
     }
 
     // add the item to the back
@@ -112,9 +111,10 @@ public class Deque<Item> implements Iterable<Item> {
     // unit testing (required)
     public static void main(String[] args){
         Deque<Integer> de=new Deque<Integer>();
-        de.addFirst(564);
-        de.addFirst(291);
-        de.addLast(24);
+        System.out.println(de.isEmpty());
+        de.addFirst(33);
+        de.addFirst(22);
+        de.addLast(11);
         de.addLast(14);
         System.out.println(de.isEmpty());
         System.out.println(de.size());
