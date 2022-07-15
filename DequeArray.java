@@ -1,15 +1,17 @@
 import java.util.*;
 public class DequeArray <Item> implements Iterable<Item> {
-    public Node front,rear;
-    private int size;
-    public class Node{
-        Item data;
-        Node prev,next;
+    private static final int Max = 10;
+
+        private Item[] arr; // queue elements
+        private int count; // number of elements on queue
+        private int first; // index of first element of queue
+        private int last; // index of next available slot
+
     } 
     // construct an empty deque
     public DequeArray(){
-        front=rear=null;
-        size = 0;
+        first=last=null;
+        count = 0;
     }
 
     // is the deque empty?
