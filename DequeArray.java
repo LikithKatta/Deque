@@ -101,12 +101,10 @@ public class DequeArray <Item> implements Iterable<Item> {
     public static void main(String[] args){
         DequeArray dq = new DequeArray();
         System.out.println(dq.isEmpty());
+        dq.addFirst(33);
+        dq.addLast(22);
         dq.addFirst(11);
-        dq.addLast(12);
-        dq.addFirst(13);
         dq.addLast(14);
-        dq.addFirst(15);
-        dq.addLast(16);
         System.out.println(dq.isEmpty());
         System.out.println(dq.size());
         System.out.println(dq.removeLast());
