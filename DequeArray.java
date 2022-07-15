@@ -1,25 +1,25 @@
 import java.util.*;
 public class DequeArray <Item> implements Iterable<Item> {
-    public Node front,rear;
-    private int size;
+    public Node first,last;
+    private int count;
     public class Node{
         Item data;
         Node prev,next;
     } 
     // construct an empty deque
     public DequeArray(){
-        front=rear=null;
+        first=last=null;
         size = 0;
     }
 
     // is the deque empty?
     public boolean isEmpty(){
-        return size == 0;
+        return count == 0;
     }
 
     // return the number of items on the deque
     public int size(){
-        return size;
+        return count;
     }
 
     // add the item to the front
@@ -29,14 +29,14 @@ public class DequeArray <Item> implements Iterable<Item> {
         }else{
             Node newNode = new Node();
             newNode.data = item;
-            if (front == null)
-                rear = front = newNode;
+            if (first == null)
+                last = first = newNode;
             else{
-                newNode.next = front;
+                newNode.next = first;
                 //front.prev = newNode;
-                front = newNode;
+                first = newNode;
             }
-            size++;
+            count++;
         }
     }
     // add the item to the back
@@ -46,31 +46,31 @@ public class DequeArray <Item> implements Iterable<Item> {
         }else{
             Node newNode = new Node();
             newNode.data = item;
-            if (rear == null)
-                front = rear = newNode;
+            if (last == null)
+                first = last = newNode;
             else{
-                newNode.prev = rear;
-                rear = newNode;
+                newNode.prev = last;
+                last = newNode;
             }
-            size++;
+            count++;
         }
     }
 
     // remove and return the item from the front
     public Item removeFirst(){
-        if (size == 0) throw new NoSuchElementException();
-        Item temp = front.data;
-        front = front.next; 
-        size--;
+        if (count == 0) throw new NoSuchElementException();
+        Item temp = first.data;
+        first = first.next; 
+        count--;
         return temp;
     }
 
     // remove and return the item from the back
     public Item removeLast(){
-        if (size == 0) throw new NoSuchElementException(); 
-        Item temp = rear.data;
-        rear = rear.prev;
-        size--;
+        if (count == 0) throw new NoSuchElementException(); 
+        Item temp = last.data;
+        last = last.prev;
+        count--;
         return temp; 
     }
 
@@ -80,7 +80,7 @@ public class DequeArray <Item> implements Iterable<Item> {
     }
 
     public class isIterator implements Iterator<Item>{
-        Node temp = front;
+        Node temp = first;
 
         public boolean hasNext(){
             return temp != null;
