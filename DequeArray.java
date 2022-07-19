@@ -1,125 +1,118 @@
 import java.util.*;
-public class DequeArray <Item> implements Iterable<Item> {
+public class DequeArray < Item > implements Iterable < Item > {
     private static final int Max = 10;
 
     private Item[] arr; // queue elements
-    private int count; // number of elements on queue
+    private int size; // number of elements on queue
     private int first; // index of first element of queue
-    private int last; // index of next available slot
+    private int rear; // index of next available slot
 
-    } 
-    // construct an empty deque
-    public DequeArray(){
+    public DequeArray() {
         arr = (Item[]) new Object[Max];
-        count = 0;
+        size = 0;
         first = 0;
-        last = 0;
+        rear = 0;
     }
 
-    // is the deque empty?
-    public boolean isEmpty(){
-        return count == 0;
+    public boolean isEmpty() {
+        return size == 0;
     }
 
-    // return the number of items on the deque
-    public int size(){
-        return count;
+    public int size() {
+        return size;
     }
 
-    // add the item to the front
-    public void addFirst(Item item){
-        if (item == null){
-            throw new IllegalArgumentException("cannot add null to the deque.");
-        }else{
-            Node newNode = new Node();
-            newNode.data = item;
-            if (front == null)
-                rear = front = newNode;
-            else{
-                newNode.next = front;
-                //front.prev = newNode;
-                front = newNode;
-            }
-            size++;
+    // resize the underlying array
+    private void resize(int capacity) {
+        assert capacity >= size;
+        Item[] copy = (Item[]) new Object[capacity];
+        for (int i = 0; i < size; i++) {
+            copy[i] = arr[(first + i) % arr.length];
         }
+        arr = copy;
+        first = 0;
+        rear = size;
     }
-    // add the item to the back
-    public void addLast(Item item){
-        if (item == null){
-            throw new IllegalArgumentException();
-        }else{
-            Node newNode = new Node();
-            newNode.data = item;
-            if (rear == null)
-                front = rear = newNode;
-            else{
-                newNode.prev = rear;
-                rear = newNode;
-            }
-            size++;
+
+    public void addFirst(Item item) {
+        if (size == arr.length) resize(2 * arr.length); // double size of array if necessary
+        //Memory usage si higher and Time Complexity is in o👎
+        for (int i = size; i > 0; i--) {
+            arr[i] = arr[i - 1];
         }
+        arr[0] = item;
+        rear++;
+        size++;
     }
 
-    // remove and return the item from the front
-    public Item removeFirst(){
-        if (size == 0) throw new NoSuchElementException();
-        Item temp = front.data;
-        front = front.next; 
-        size--;
-        return temp;
+    public void addLast(Item item) {
+        if (size == arr.length) resize(2 * arr.length); // double size of array if necessary
+        arr[rear++] = item; // add item
+        if (rear == arr.length) rear = 0; // wrap-around
+        size++;
     }
 
-    // remove and return the item from the back
-    public Item removeLast(){
-        if (size == 0) throw new NoSuchElementException(); 
-        Item temp = rear.data;
-        rear = rear.prev;
+    public Item removeFirst() {
+        if (isEmpty()) throw new NoSuchElementException("Queue underflow");
+        Item temp = arr[first];
+        arr[first] = null; // to avoid loitering
         size--;
+        first++;
+        //rear--;
+        if (first == arr.length) first = 0; // wrap-around
+        // shrink size of array if necessary
+        if (size > 0 && size == arr.length / 4) resize(arr.length / 2);
         return temp; 
     }
 
-    // return an iterator over items in order from front to back
-    public Iterator<Item> iterator(){
-        return new isIterator();
+    public Item removeLast() {
+        if (isEmpty()) throw new NoSuchElementException("Queue underflow");
+        Item item = arr[rear];
+        while (item == null){
+            item = arr[rear--];
+        }
+        size--;
+        // shrink size of array if necessary
+        if (size > 0 && size == arr.length / 4) resize(arr.length / 2);
+        return item;
     }
 
-    public class isIterator implements Iterator<Item>{
-        Node temp = front;
+    public Iterator < Item > iterator() {
+        return new ArrayIterator();
+    }
 
-        public boolean hasNext(){
-            return temp != null;
+    private class ArrayIterator implements Iterator < Item > {
+        private int i = 0;
+        public boolean hasNext() {
+            return i < size;
         }
-
-        public Item next(){
-            if(!hasNext())throw new NoSuchElementException();
-            Item temp1 = temp.data;
-            temp = temp.next;
-            return temp1; 
-        }
-        public void remove(){
+        public void remove() {
             throw new UnsupportedOperationException();
         }
+        public Item next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            Item item = arr[(i + first) % arr.length];
+            i++;
+            return item;
+        }
     }
-
-    // unit testing (required)
-    public static void main(String[] args){
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
         DequeArray dq = new DequeArray();
-        System.out.println(dq.isEmpty());
         dq.addFirst(11);
         dq.addLast(12);
         dq.addFirst(13);
         dq.addLast(14);
         dq.addFirst(15);
         dq.addLast(16);
-        System.out.println(dq.isEmpty());
+        System.out.println(Arrays.toString(dq.arr));
         System.out.println(dq.size());
+        System.out.println(dq.removeFirst());
         System.out.println(dq.removeLast());
         System.out.println(dq.removeFirst());
-        System.out.println(dq.size());
         System.out.println(dq.removeLast());
         System.out.println(dq.removeFirst());
-        System.out.println(dq.isEmpty());
-
+        System.out.println(dq.removeLast());
+        System.out.print(dq.size());
     }
-
 }
